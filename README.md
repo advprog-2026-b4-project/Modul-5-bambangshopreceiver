@@ -98,3 +98,22 @@ static function, why did not Rust allow us to do so?
 because rust requires standard static variables to be initialized with constant values, complex types like vec or dashmap require dynamic heap allocatoin, we must use lazy_static macro to defer their creation until runtime. second, rust explicitly forbids safe direct mutation of global variables because it is a massive concurreny hazard. instead, rust forces us to define the global variable as immutable, but wrap the internal data in thread-safe structures to safely achieve "interior mutability" without risking data races
 
 #### Reflection Subscriber-2
+
+1. Have you explored things outside of the steps in the tutorial, for example: src/lib.rs? If not,
+explain why you did not do so. If yes, explain things that you have learned from those other
+parts of code.
+
+yes i explored src/lib.rs and learned how it manages the application's global configuration. Specifically, it handles parsing .env variables into the AppConfig struct and setting up the reqwest::Client. Understanding this was essential to see exactly how our app dynamically binds to different ports for the multiple Receiver instances and handles CORS security.
+
+2. Since you have completed the tutorial by now and have tried to test your notification system
+by spawning multiple instances of Receiver, explain how Observer pattern eases you to plug
+in more subscribers. How about spawning more than one instance of Main app, will it still be
+easy enough to add to the system?
+
+the observer pattern makes plugging in new subscribers really easy because it enforces loose coupling, but adding instance main app is not going to be easy. currently, the list of subscriber are stored in the local memory (RAM) by each application. if there is a second publisher, it will not know whether the list of subscriber are from the first publisher. we need a dataabase or external message broker like redis or babitmq so that we can shared the data between publisher
+
+3. Have you tried to make your own Tests, or enhance documentation on your Postman
+collection? If you have tried those features, tell us whether it is useful for your work (it can be
+your tutorial work or your Group Project).
+
+yes i have tried it, especially for my group project, the automated test feature in postman are helpful to check automatically whether the API endpoint could run well after we change some codes. besides that, the automatic documentation feature are really good to be a guideance so that the front end team could understand on how to use the API that the backend created
